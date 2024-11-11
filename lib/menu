@@ -1,0 +1,184 @@
+import 'package:flutter/material.dart';
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: const MyHomePage(title: 'Home Page with Drawer Menu'),
+    );
+  }
+}
+
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key, required this.title});
+
+  final String title;
+
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  // Variable pour savoir quelle section est ouverte
+  String selectedSection = '';
+
+  // Fonction pour afficher une section sélectionnée
+  void selectSection(String section) {
+    setState(() {
+      selectedSection = section;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.title),
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            // Header avec image et nom
+            const DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+              child: UserHeader(),
+            ),
+            // Menu principal
+            ListTile(
+              leading: const Icon(Icons.home),
+              title: const Text('Home'),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+            // Section 1: Classification d'images
+            ListTile(
+              leading: const Icon(Icons.image),
+              title: const Text('Classification d\'images'),
+              onTap: () {
+                selectSection('classification');
+                Navigator.pop(context); // Ferme le menu
+              },
+            ),
+            // Section 2: Autres choix
+            ListTile(
+              leading: const Icon(Icons.list),
+              title: const Text('Autres choix'),
+              onTap: () {
+                selectSection('autres');
+                Navigator.pop(context); // Ferme le menu
+              },
+            ),
+          ],
+        ),
+      ),
+      body: Center(
+        child: selectedSection.isEmpty
+            ? const Text('Sélectionnez une section dans le menu.')
+            : selectedSection == 'classification'
+                ? const ImageClassificationSection()
+                : const OtherChoicesSection(),
+      ),
+    );
+  }
+}
+
+// Widget d'en-tête pour le Drawer
+class UserHeader extends StatelessWidget {
+  const UserHeader({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        CircleAvatar(
+          radius: 30,
+          backgroundImage: AssetImage('assets/profile_image.jpg'), // Remplacez ceci par le chemin de votre image
+        ),
+        const SizedBox(height: 10),
+        const Text(
+          'Hamza',
+          style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+        const Text(
+          'hamzafahel@gmail.com',
+          style: TextStyle(color: Colors.white),
+        ),
+      ],
+    );
+  }
+}
+
+// Section 1: Classification d'images
+class ImageClassificationSection extends StatelessWidget {
+  const ImageClassificationSection({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Text('Classification d\'images', style: TextStyle(fontSize: 24)),
+        const SizedBox(height: 20),
+        ListTile(
+          leading: const Icon(Icons.analytics),
+          title: const Text('ANN'),
+          onTap: () {
+            print("ANN sélectionné");
+          },
+        ),
+        ListTile(
+          leading: const Icon(Icons.analytics),
+          title: const Text('CNN'),
+          onTap: () {
+            print("CNN sélectionné");
+          },
+        ),
+      ],
+    );
+  }
+}
+
+// Section 2: Autres choix
+class OtherChoicesSection extends StatelessWidget {
+  const OtherChoicesSection({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Text('Autres choix', style: TextStyle(fontSize: 24)),
+        const SizedBox(height: 20),
+        ListTile(
+          leading: const Icon(Icons.language),
+          title: const Text('LLM'),
+          onTap: () {
+            print("LLM sélectionné");
+          },
+        ),
+        ListTile(
+          leading: const Icon(Icons.language),
+          title: const Text('RAG'),
+          onTap: () {
+            print("RAG sélectionné");
+          },
+        ),
+      ],
+    );
+  }
+}
+
+void main() {
+  runApp(const MyApp());
+}
